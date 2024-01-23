@@ -9,4 +9,8 @@
     <string name="full_name">Full name</string>
     <string name="or">---------------  Or  ---------------</string>
     <string name="sign_up_with_google">Sign Up with Google</string>
+    <string name="orline">────────── Or ──────────</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="enter_your_password">Enter your password</string>
 </resources>
