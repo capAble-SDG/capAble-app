@@ -52,7 +52,8 @@ android {
 dependencies {
 
     implementation ("androidx.appcompat:appcompat:1.4.1")
-
+    //implement okhttp
+    implementation("com.squareup.okhttp3:okhttp:4.9.2")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")

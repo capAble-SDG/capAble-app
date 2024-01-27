@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3788A2">
+    android:background="#079DCD">
 
     <ImageView
         android:id="@+id/bg"
@@ -21,26 +21,12 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/workable" />
 
-    <TextView
-android:id="@+id/workable1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="-10dp"
-        android:layout_below="@id/workable"
-        android:layout_centerHorizontal="true"
-        android:text="'the only thing better than \nquality, is equality.'"
-        android:textColor="#010F19"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-
 
     <Button
     android:id="@+id/signupButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="590dp"
+    android:layout_marginTop="550dp"
     android:layout_centerHorizontal="true"
     android:text="@string/sign_up"
     android:textColor="#FFFFFF"
