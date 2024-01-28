@@ -14,14 +14,20 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 
 
 class SignUpActivity: AppCompatActivity() {
 
     private lateinit var db: FirebaseFirestore
-
+    private lateinit var auth:FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +86,12 @@ class SignUpActivity: AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
         }
 
+        auth = FirebaseAuth.getInstance()
+
+        val googleSignInButton: Button = findViewById(R.id.google)
+        googleSignInButton.setOnClickListener {
+            googleSignIn()
+        }
 
         val textViewLoginPrompt: TextView = findViewById(R.id.textViewLoginPrompt)
         val spannableString = SpannableString("Already have an account? Login")
@@ -93,7 +105,7 @@ class SignUpActivity: AppCompatActivity() {
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
                 ds.isUnderlineText = true //to make the login underlined
-                ds.color = Color.BLACK 
+                ds.color = Color.BLACK
             }
         }
 
@@ -103,6 +115,78 @@ class SignUpActivity: AppCompatActivity() {
         textViewLoginPrompt.movementMethod = LinkMovementMethod.getInstance()
 
     }
+
+    private fun googleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken("459974671569-321sc64ilda12fu7l1k5tuck6k76md7b.apps.googleusercontent.com")
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)!!
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                Toast.makeText(this, "Google Sign-In failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {
+                // get the user info from the authenticated user
+                val firebaseUser = auth.currentUser
+                val name = firebaseUser?.displayName ?: ""
+                val email = firebaseUser?.email ?: ""
+
+                // check if user already exists
+                checkUserInFirestore(name, email)
+            } else {
+                Toast.makeText(this, "Authentication Failed.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun checkUserInFirestore(fullName: String, email: String) {
+        db.collection("users").whereEqualTo("email", email).limit(1).get()
+            .addOnSuccessListener { documents ->
+                if (documents.isEmpty) {
+                    // since user doesn't exist, create new
+                    addUserToFirestore(fullName, email)
+                } else {
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error checking user: $e", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun addUserToFirestore(fullName: String, email: String) {
+        val user = hashMapOf("fullName" to fullName, "email" to email)
+        db.collection("users").add(user)
+            .addOnSuccessListener {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error adding user to Firestore: $e", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+
     private fun createUser(fullName: String, email: String, password: String) {
         val user = hashMapOf(
             "fullName" to fullName,
@@ -119,5 +203,10 @@ class SignUpActivity: AppCompatActivity() {
                 println("Error adding user $e")
             }
     }
+
+    companion object {
+        private const val RC_SIGN_IN = 9001
+    }
+
 
 }

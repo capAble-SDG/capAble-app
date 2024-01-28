@@ -21,11 +21,11 @@
         android:id="@+id/signUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome Back! \nWe're so happy to see you again."
+        android:text="@string/welcome_back_nwe_re_so_happy_to_see_you_again"
         android:gravity="center"
         android:fontFamily="sans-serif-medium"
 
-        android:textSize="36sp"
+        android:textSize="34sp"
         android:layout_marginTop="24dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/back"
@@ -33,7 +33,6 @@
         android:layout_marginStart="26dp"
         android:textFontWeight="600"
         tools:targetApi="p" />
-
 
 
     <EditText
@@ -66,7 +65,7 @@
         android:id="@+id/forgotpassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Forgot Password?"
+        android:text="@string/forgot_password"
         android:paddingEnd="32dp"
         android:gravity="end"
         android:layout_below="@+id/password"
@@ -124,7 +123,7 @@
         android:id="@+id/textViewSignUpPrompt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Don't have an account? Sign Up"
+        android:text="@string/don_t_have_an_account_sign_up"
         android:gravity="center"
         android:layout_below="@+id/google"
         android:textColor="#FFFFFF"

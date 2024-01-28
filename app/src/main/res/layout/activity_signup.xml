@@ -131,7 +131,7 @@
         android:id="@+id/textViewLoginPrompt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Already have an account? Login"
+        android:text="@string/already_have_an_account_login"
         android:gravity="center"
         android:layout_below="@+id/google"
         android:textColor="#FFFFFF"

@@ -17,14 +17,27 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 class LoginActivity: AppCompatActivity() {
 
     private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        auth = FirebaseAuth.getInstance()
+        val googleSignInButton: Button = findViewById(R.id.google)
+        googleSignInButton.setOnClickListener {
+            googleSignIn()
+        }
 
         db = FirebaseFirestore.getInstance()
 
@@ -75,7 +88,6 @@ class LoginActivity: AppCompatActivity() {
         textViewLoginPrompt.text = spannableString
         textViewLoginPrompt.movementMethod = LinkMovementMethod.getInstance()
 
-
     }
 
     private fun loginUser(email: String, password: String) {
@@ -101,4 +113,48 @@ class LoginActivity: AppCompatActivity() {
                 Toast.makeText(this, "Error logging in: $exception", Toast.LENGTH_SHORT).show()
             }
     }
+
+    private fun googleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken("459974671569-321sc64ilda12fu7l1k5tuck6k76md7b.apps.googleusercontent.com")
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)!!
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                Toast.makeText(this, "Google Sign-In failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            } else {
+                val errorMessage = task.exception?.message ?: "Unknown error occurred"
+                Toast.makeText(this, "Authentication failed: $errorMessage", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+
+    companion object {
+        private const val RC_SIGN_IN = 9001
+    }
+
+
 }

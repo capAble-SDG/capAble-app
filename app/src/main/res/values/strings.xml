@@ -13,4 +13,8 @@
     <string name="login_with_google">Login with Google</string>
     <string name="enter_your_email">Enter your email</string>
     <string name="enter_your_password">Enter your password</string>
+    <string name="don_t_have_an_account_sign_up">Don\'t have an account? Sign Up</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="welcome_back_nwe_re_so_happy_to_see_you_again">Welcome Back! \nWe\'re so happy to see you again.</string>
+    <string name="already_have_an_account_login">Already have an account? Login</string>
 </resources>
