@@ -10,19 +10,76 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class SignUpActivity: AppCompatActivity() {
+
+    private lateinit var db: FirebaseFirestore
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+
+        db = FirebaseFirestore.getInstance()
 
         val backButton: ImageButton = findViewById(R.id.back)
         backButton.setOnClickListener {
             startActivity(Intent(this, SplashActivity::class.java))
         }
+
+        val fullNameEditText: EditText = findViewById(R.id.fullName)
+        val emailEditText: EditText = findViewById(R.id.email)
+        val passwordEditText: EditText = findViewById(R.id.password)
+        val confirmPasswordEditText: EditText = findViewById(R.id.confirmPassword)
+        val signupButton: Button = findViewById(R.id.signupButton)
+
+        signupButton.setOnClickListener {
+            val fullName = fullNameEditText.text.toString()
+            val email = emailEditText.text.toString()
+            val password = passwordEditText.text.toString()
+            val confirmPassword = confirmPasswordEditText.text.toString()
+
+            if (fullName.isEmpty()) {
+                fullNameEditText.error = "Please enter your full name"
+                fullNameEditText.requestFocus()
+                return@setOnClickListener
+            }
+
+            if (email.isEmpty()) {
+                emailEditText.error = "Please enter your email"
+                emailEditText.requestFocus()
+                return@setOnClickListener
+            }
+
+            if (password.isEmpty()) {
+                passwordEditText.error = "Please enter your password"
+                passwordEditText.requestFocus()
+                return@setOnClickListener
+            }
+
+            if (confirmPassword.isEmpty()) {
+                confirmPasswordEditText.error = "Please confirm your password"
+                confirmPasswordEditText.requestFocus()
+                return@setOnClickListener
+            }
+
+            if (password != confirmPassword) {
+                confirmPasswordEditText.error = "Passwords do not match"
+                confirmPasswordEditText.requestFocus()
+                return@setOnClickListener
+            }
+
+            createUser(fullName, email, password)
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
 
         val textViewLoginPrompt: TextView = findViewById(R.id.textViewLoginPrompt)
         val spannableString = SpannableString("Already have an account? Login")
@@ -35,8 +92,8 @@ class SignUpActivity: AppCompatActivity() {
 
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
-                ds.isUnderlineText = true // if you want login underlined
-                ds.color = Color.BLACK // text color
+                ds.isUnderlineText = true //to make the login underlined
+                ds.color = Color.BLACK 
             }
         }
 
@@ -45,8 +102,22 @@ class SignUpActivity: AppCompatActivity() {
         textViewLoginPrompt.text = spannableString
         textViewLoginPrompt.movementMethod = LinkMovementMethod.getInstance()
 
+    }
+    private fun createUser(fullName: String, email: String, password: String) {
+        val user = hashMapOf(
+            "fullName" to fullName,
+            "email" to email,
+            "password" to password
+        )
 
-
+        db.collection("users")
+            .add(user)
+            .addOnSuccessListener { documentReference ->
+                println("User added with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                println("Error adding user $e")
+            }
     }
 
 }

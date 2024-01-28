@@ -4,4 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/workable"
+        android:layout_width="206dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="400dp"
+        android:layout_height="83dp"
+        android:src="@drawable/workable" />
+
 </LinearLayout>

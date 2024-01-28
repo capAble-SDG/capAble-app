@@ -1,7 +1,6 @@
 @file:Suppress("DEPRECATION")
 
 package com.example.workable
-import android.annotation.SuppressLint
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -16,12 +15,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
         // we cannot perform operns like fetching data from a server on the main thread
         // bec that may freeze the ui, app could crash. so we use AsyncTask
-
-        // this line starts the async task
-        Parsing().execute("https://jsonplaceholder.typicode.com/users")
+        Parsing().execute("https://jsonplaceholder.typicode.com/users") // this line starts the async task
     }
 
     private inner class Parsing : AsyncTask<String, Void, String>() {
@@ -51,6 +49,9 @@ class MainActivity : ComponentActivity() {
                 e.printStackTrace()
             }
         }
+
+
+
     }
 
 

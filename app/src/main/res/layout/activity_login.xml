@@ -10,7 +10,7 @@
         android:id="@+id/back"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#3788A2"
+        android:background="#079DCD"
         android:layout_gravity="start"
         android:layout_marginTop="28dp"
         android:layout_marginStart="10dp"
@@ -21,25 +21,19 @@
         android:id="@+id/signUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome Back!"
+        android:text="Welcome Back! \nWe're so happy to see you again."
+        android:gravity="center"
         android:fontFamily="sans-serif-medium"
 
         android:textSize="36sp"
         android:layout_marginTop="24dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/workable"
+        android:layout_below="@+id/back"
         android:textColor="#000226"
         android:layout_marginStart="26dp"
         android:textFontWeight="600"
         tools:targetApi="p" />
 
-    <ImageView
-        android:id="@+id/workable"
-        android:layout_width="206dp"
-        android:layout_below="@id/back"
-        android:layout_height="83dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/workable" />
 
 
     <EditText
@@ -51,7 +45,7 @@
         android:layout_below="@+id/signUp"
         android:inputType="textEmailAddress"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/login"
         android:paddingStart="18dp" />
 
