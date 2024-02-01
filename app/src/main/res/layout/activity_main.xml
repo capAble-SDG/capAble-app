@@ -1,15 +1,99 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/workable"
-        android:layout_width="206dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="400dp"
-        android:layout_height="83dp"
-        android:src="@drawable/workable" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:padding="20dp"
+        android:elevation="16dp"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</LinearLayout>
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:iconifiedByDefault="false"
+            android:queryHint="Position, company"
+            android:searchIcon="@drawable/search" />
+
+
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/filtersButton"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/filters"
+        android:contentDescription="@string/confirm_password"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView"
+        app:layout_constraintEnd_toEndOf="@+id/cardView"
+        app:layout_constraintTop_toTopOf="@+id/cardView"
+        tools:ignore="TouchTargetSizeCheck" />
+
+
+    <ImageView
+        android:id="@+id/navbarBackground"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:src="@drawable/navbar"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/navbarContainer"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@id/navbarBackground"
+        app:layout_constraintStart_toStartOf="@id/navbarBackground"
+        app:layout_constraintEnd_toEndOf="@id/navbarBackground">
+
+        <ImageButton
+            android:id="@+id/briefcaseIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ECEFEF"
+            android:contentDescription="@string/already_have_an_account_login"
+            android:padding="36dp"
+            android:src="@drawable/opps" />
+
+        <ImageButton
+            android:id="@+id/bellIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ECEFEF"
+
+            android:contentDescription="@string/email"
+            android:padding="36dp"
+            android:src="@drawable/notifs" />
+
+        <ImageButton
+            android:id="@+id/personIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="500dp"
+
+            android:background="#ECEFEF"
+            android:contentDescription="@string/enter_your_password"
+
+            android:padding="36dp"
+            android:src="@drawable/profile" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
