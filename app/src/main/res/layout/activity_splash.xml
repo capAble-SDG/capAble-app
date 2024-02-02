@@ -11,11 +11,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="-57dp"
         android:src="@drawable/bg"
+        android:elevation="10dp"
         tools:ignore="ImageContrastCheck" />
 
     <ImageView
         android:id="@+id/workable"
         android:layout_width="206dp"
+        android:elevation="10dp"
+
         android:layout_height="83dp"
         android:layout_marginTop="440dp"
         android:layout_centerHorizontal="true"
@@ -29,7 +32,8 @@
     android:layout_marginTop="550dp"
     android:layout_centerHorizontal="true"
     android:text="@string/sign_up"
-    android:textColor="#FFFFFF"
+
+        android:textColor="#FFFFFF"
 
     android:background="@drawable/signup"
         android:textSize="20sp"
@@ -41,6 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:elevation="40dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/signupButton"
         android:text="@string/login"

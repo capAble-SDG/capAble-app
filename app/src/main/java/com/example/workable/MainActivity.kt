@@ -1,11 +1,17 @@
 @file:Suppress("DEPRECATION")
 
 package com.example.workable
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.SearchView
 import androidx.activity.ComponentActivity
+import com.example.workable.ui.ProfileActivity
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.BufferedReader
@@ -18,6 +24,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val closeResumeBox: ImageButton = findViewById(R.id.closeResumeBox)
+        val resumeBox: LinearLayout = findViewById(R.id.resumeBox)
+        closeResumeBox.setOnClickListener {
+            resumeBox.visibility = View.GONE
+        }
+
+        val profile: ImageButton = findViewById(R.id.profile)
+        profile.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
 
 
         // we cannot perform operns like fetching data from a server on the main thread

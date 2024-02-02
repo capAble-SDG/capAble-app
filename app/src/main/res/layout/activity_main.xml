@@ -45,7 +45,100 @@
         tools:ignore="TouchTargetSizeCheck" />
 
 
-    <ImageView
+    <LinearLayout
+        android:id="@+id/resumeBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="48dp"
+        android:background="@drawable/rounded_background"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/resumeText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="6dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/fill_in_your_resume"
+                android:textColor="#000"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/closeResumeBox"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/password"
+                android:src="@drawable/ic_close" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/resumeInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:paddingStart="6dp"
+
+            android:text="@string/fill_in_your_resume_to_have_a_nbetter_shot_at_getting_hired"
+            android:textColor="#666"
+            android:textSize="16sp" />
+
+
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/companiesScrollView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/enter_your_password"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/resumeBox">
+
+        <LinearLayout
+            android:id="@+id/companiesContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+<androidx.recyclerview.widget.RecyclerView
+android:id="@+id/recommendedRecyclerView"
+android:layout_width="0dp"
+android:layout_height="0dp"
+android:orientation="vertical"
+app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+app:layout_constraintTop_toBottomOf="@id/companiesScrollView"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintEnd_toEndOf="parent"
+app:layout_constraintBottom_toTopOf="@id/navbarBackground" />
+
+
+
+
+<ImageView
         android:id="@+id/navbarBackground"
         android:layout_width="0dp"
         android:layout_height="72dp"
@@ -85,7 +178,7 @@
             android:src="@drawable/notifs" />
 
         <ImageButton
-            android:id="@+id/personIcon"
+            android:id="@+id/profile"
             android:layout_width="wrap_content"
             android:layout_height="500dp"
 
