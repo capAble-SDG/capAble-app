@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_gravity="center"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F7F6EC"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/jobTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="#000000"
+    android:text="Job Title"
+    android:textSize="24sp"
+    android:layout_marginBottom="4dp"/>
+
+    <!-- Company Name -->
+    <TextView
+        android:id="@+id/jobCompany"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Company Name"
+        android:textSize="16sp"
+        android:textColor="#757575"
+    android:layout_marginBottom="4dp"/>
+
+    <TextView
+        android:id="@+id/jobRating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    android:drawablePadding="8dp"
+    android:text="Rating: 5.0"
+    android:textSize="14sp"
+    android:layout_marginBottom="4dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="4dp">
+
+        <TextView
+            android:id="@+id/jobType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Full Time"
+            android:textSize="14sp" />
+
+
+
+        <TextView
+            android:id="@+id/jobLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+        android:text="Remote"
+        android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/jobSalary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Salary: $5000-$6000"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#4CAF50"
+    android:layout_marginBottom="4dp"/>
+
+</LinearLayout>
+    </androidx.cardview.widget.CardView>

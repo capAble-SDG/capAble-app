@@ -1,6 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+<androidx.core.widget.NestedScrollView
+    android:id="@+id/scrollableView"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:fillViewport="true"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/navbarBackground"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent">
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -103,42 +119,71 @@
 
     </LinearLayout>
 
-    <HorizontalScrollView
-        android:id="@+id/companiesScrollView"
+    <TextView
+        android:id="@+id/topCompanies"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/enter_your_password"
-        android:scrollbars="none"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-medium"
+        android:paddingStart="6dp"
+        android:text="Top Companies"
+        android:textColor="#000"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/topCompaniesRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/topCompaniesRecyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/resumeBox" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/topCompaniesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/or"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/resumeBox">
+        app:layout_constraintTop_toBottomOf="@id/resumeBox"
+        tools:listitem="@layout/item_company" />
 
-        <LinearLayout
-            android:id="@+id/companiesContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp">
+    <TextView
+        android:id="@+id/recommendedForYou"
+        android:layout_width="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:paddingStart="16dp"
+        android:text="Recommended for you"
+        android:textColor="#000"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topCompaniesRecyclerView" />
+
+    <LinearLayout
+        android:id="@+id/recommendedJobsContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@+id/recommendedForYou"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
-        </LinearLayout>
-    </HorizontalScrollView>
 
-<androidx.recyclerview.widget.RecyclerView
-android:id="@+id/recommendedRecyclerView"
-android:layout_width="0dp"
-android:layout_height="0dp"
-android:orientation="vertical"
-app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-app:layout_constraintTop_toBottomOf="@id/companiesScrollView"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-app:layout_constraintBottom_toTopOf="@id/navbarBackground" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 
+</androidx.core.widget.NestedScrollView>
 
-
-
-<ImageView
+    <ImageView
         android:id="@+id/navbarBackground"
         android:layout_width="0dp"
         android:layout_height="72dp"
@@ -157,7 +202,6 @@ app:layout_constraintBottom_toTopOf="@id/navbarBackground" />
         app:layout_constraintBottom_toBottomOf="@id/navbarBackground"
         app:layout_constraintStart_toStartOf="@id/navbarBackground"
         app:layout_constraintEnd_toEndOf="@id/navbarBackground">
-
         <ImageButton
             android:id="@+id/briefcaseIcon"
             android:layout_width="wrap_content"
@@ -187,6 +231,7 @@ app:layout_constraintBottom_toTopOf="@id/navbarBackground" />
 
             android:padding="36dp"
             android:src="@drawable/profile" />
-    </LinearLayout>
 
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

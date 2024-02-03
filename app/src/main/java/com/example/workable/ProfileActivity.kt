@@ -1,4 +1,4 @@
-package com.example.workable.ui
+package com.example.workable
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

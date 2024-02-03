@@ -1,5 +1,6 @@
 package com.example.workable
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -83,6 +84,11 @@ class SignUpActivity: AppCompatActivity() {
             }
 
             createUser(fullName, email, password)
+            val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+            with (sharedPref.edit()) {
+                putBoolean("isLoggedIn", true)
+                apply()
+            }
             startActivity(Intent(this, MainActivity::class.java))
         }
 
@@ -165,6 +171,11 @@ class SignUpActivity: AppCompatActivity() {
                     // since user doesn't exist, create new
                     addUserToFirestore(fullName, email)
                 } else {
+                    val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+                    with (sharedPref.edit()) {
+                        putBoolean("isLoggedIn", true)
+                        apply()
+                    }
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
@@ -178,6 +189,11 @@ class SignUpActivity: AppCompatActivity() {
         val user = hashMapOf("fullName" to fullName, "email" to email)
         db.collection("users").add(user)
             .addOnSuccessListener {
+                val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+                with (sharedPref.edit()) {
+                    putBoolean("isLoggedIn", true)
+                    apply()
+                }
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }

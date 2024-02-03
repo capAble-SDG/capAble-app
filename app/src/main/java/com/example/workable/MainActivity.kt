@@ -1,22 +1,17 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.workable
 import android.content.Intent
-import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
+import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.SearchView
+import android.widget.TextView
 import androidx.activity.ComponentActivity
-import com.example.workable.ui.ProfileActivity
-import org.json.JSONArray
-import org.json.JSONException
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.URL
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+
 
 class MainActivity : ComponentActivity() {
 
@@ -35,58 +30,95 @@ class MainActivity : ComponentActivity() {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
 
+        val topCompanies = listOf(
+            Company("Facebook", logo = R.drawable.profile),
+            Company("Apple", android.R.drawable.ic_btn_speak_now),
+            Company("Amazon", R.drawable.ic_launcher_foreground)
+        )
 
-        // we cannot perform operns like fetching data from a server on the main thread
-        // bec that may freeze the ui, app could crash. so we use AsyncTask
-        // Parsing().execute("https://jsonplaceholder.typicode.com/users") // this line starts the async task
+        val topCompaniesRecyclerView: RecyclerView = findViewById(R.id.topCompaniesRecyclerView)
+        topCompaniesRecyclerView.adapter = CompaniesAdapter(topCompanies)
+
+        val recommendedJobs = listOf(
+            JobPosition("Junior Designer", "Airbit", 5.0f, "Full Time", "Remote", "$5000-$6000"),
+            JobPosition("Senior Developer", "TechCorp", 4.8f, "Full Time", "On-site", "$8000-$10000"),
+            JobPosition("UI/UX Designer", "DesignPro", 4.5f, "Part Time", "Remote", "$4000-$5000")
+        )
+
+        val recommendedJobsContainer: LinearLayout = findViewById(R.id.recommendedJobsContainer)
+        recommendedJobs.forEach { jobPosition ->
+            val jobView = LayoutInflater.from(this).inflate(R.layout.job_position, recommendedJobsContainer, false)
+            bindJobView(jobView, jobPosition)
+            recommendedJobsContainer.addView(jobView)
+        }
+
     }
 
-//
-//    private inner class Parsing : AsyncTask<String, Void, String>() {
-//
-//        // the doInBackground() fn executes in the bg, not on mainthread
-//        // so we can perform net operns here, asynchronously
-//        override fun doInBackground(vararg params: String): String {
-//            return getJsonDataFromUrl(params[0])
-//        }
-//
-//
-//        // this fn is executed after the async (doInBackground) fn, so it executes on the main thread i.e.
-//        // the json fetched in the bg is now available to use on the main thread (for parsing)
-//        override fun onPostExecute(result: String) {
-//            try {
-//                // parsing the JSON array, not a single object
-//                // bec the json in the url is in array format
-//                val jsonArray = JSONArray(result)
-//
-//                // looping through each JSON object in the array
-//                for (i in 0 until jsonArray.length()) {
-//                    val jsonObject = jsonArray.getJSONObject(i)
-//                    Log.d("MainActivity", jsonObject.toString())
-//                }
-//
-//            } catch (e: JSONException) {
-//                e.printStackTrace()
-//            }
-//        }
-//
-//
-//
-//    }
-//
-//
-//    // this fn fetches the json data from the url (in the bg)
-//    private fun getJsonDataFromUrl(url: String): String {
-//        val connection = URL(url).openConnection()
-//        val reader = BufferedReader(InputStreamReader(connection.getInputStream()))
-//        val jsonData = StringBuilder()
-//
-//        var line: String?
-//        while (reader.readLine().also { line = it } != null) {
-//            jsonData.append(line)
-//        }
-//        reader.close()
-//
-//        return jsonData.toString()
-//    }
+    private fun bindJobView(view: View, jobPosition: JobPosition) {
+        view.findViewById<TextView>(R.id.jobTitle).text = jobPosition.title
+        view.findViewById<TextView>(R.id.jobCompany).text = jobPosition.company
+        view.findViewById<TextView>(R.id.jobRating).text = "Rating: ${jobPosition.rating}"
+        view.findViewById<TextView>(R.id.jobType).text = jobPosition.jobType
+        view.findViewById<TextView>(R.id.jobLocation).text = "Location: ${jobPosition.location}"
+        view.findViewById<TextView>(R.id.jobSalary).text = "Salary: ${jobPosition.salaryRange}"
+    }
+
+class CompaniesAdapter(private val companies: List<Company>) :
+    RecyclerView.Adapter<CompaniesAdapter.CompanyViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_company, parent, false)
+        return CompanyViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: CompanyViewHolder, position: Int) {
+        val company = companies[position]
+        holder.bind(company)
+    }
+
+    override fun getItemCount(): Int = companies.size
+
+    class CompanyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val companyLogo: ImageView = itemView.findViewById(R.id.companyLogo)
+
+        fun bind(company: Company) {
+            companyLogo.setImageResource(company.logo)
+        }
+    }
+}
+    class JobPositionsAdapter(private val jobPositions: List<JobPosition>) :
+        RecyclerView.Adapter<JobPositionsAdapter.JobPositionViewHolder>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobPositionViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.job_position, parent, false)
+            return JobPositionViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: JobPositionViewHolder, position: Int) {
+            holder.bind(jobPositions[position])
+        }
+
+        override fun getItemCount(): Int = jobPositions.size
+
+        class JobPositionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            private val jobTitle: TextView = itemView.findViewById(R.id.jobTitle)
+            private val jobCompany: TextView = itemView.findViewById(R.id.jobCompany)
+            private val jobRating: TextView = itemView.findViewById(R.id.jobRating)
+            private val jobType: TextView = itemView.findViewById(R.id.jobType)
+            private val jobLocation: TextView = itemView.findViewById(R.id.jobLocation)
+            private val jobSalary: TextView = itemView.findViewById(R.id.jobSalary)
+
+            fun bind(jobPosition: JobPosition) {
+                jobTitle.text = jobPosition.title
+                jobCompany.text = jobPosition.company
+                jobRating.text = "Rating: ${jobPosition.rating}"
+                jobType.text = jobPosition.jobType
+                jobLocation.text = "Location: ${jobPosition.location}"
+                jobSalary.text = "Salary: ${jobPosition.salaryRange}"
+            }
+        }
+    }
+
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.workable
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -99,6 +100,11 @@ class LoginActivity: AppCompatActivity() {
                     val userPassword = document.getString("password")
                     if (password == userPassword) {
                         val intent = Intent(this, MainActivity::class.java)
+                        val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+                        with (sharedPref.edit()) {
+                            putBoolean("isLoggedIn", true)
+                            apply()
+                        }
                         startActivity(intent)
                         finish()
                     } else {
@@ -142,6 +148,11 @@ class LoginActivity: AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
+                val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+                with (sharedPref.edit()) {
+                    putBoolean("isLoggedIn", true)
+                    apply()
+                }
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
