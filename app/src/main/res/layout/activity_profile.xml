@@ -4,18 +4,142 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileActivity">
+    android:background="#ECEFEF">
 
-
-<ImageView
-        android:id="@+id/imageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="266dp"
-        android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_launcher_foreground"
-        app:layout_constraintEnd_toEndOf="parent"
+    <ImageButton
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/enter_your_password"
+        android:padding="16dp"
+        android:src="@drawable/back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/filters"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/profileBar"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:progress="60"
+        android:src="@drawable/pfp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/back" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/profileCompletionBar"
+        android:layout_marginTop="16dp"
+        android:progress="60"
+        app:layout_constraintEnd_toEndOf="@+id/profileBar"
+        app:layout_constraintStart_toStartOf="@id/profileBar"
+        app:layout_constraintTop_toBottomOf="@id/profileBar" />
+
+
+    <TextView
+        android:id="@+id/txtProfileCompletionStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="60% profile completed"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/profileCompletionBar"
+        app:layout_constraintStart_toStartOf="@id/profileCompletionBar"
+        app:layout_constraintTop_toBottomOf="@id/profileCompletionBar" />
+
+    <TextView
+        android:id="@+id/txtUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="John Singh"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/txtProfileCompletionStatus"
+        app:layout_constraintStart_toStartOf="@id/txtProfileCompletionStatus"
+        app:layout_constraintTop_toBottomOf="@id/txtProfileCompletionStatus" />
+
+    <TextView
+        android:id="@+id/txtJobTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Creative Designer"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/txtUserName"
+        app:layout_constraintStart_toStartOf="@id/txtUserName"
+        app:layout_constraintTop_toBottomOf="@id/txtUserName" />
+
+    <TextView
+        android:id="@+id/txtCompanyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tecorb Technologies Private Limited"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/txtJobTitle"
+        app:layout_constraintStart_toStartOf="@id/txtJobTitle"
+        app:layout_constraintTop_toBottomOf="@id/txtJobTitle" />
+
+    <LinearLayout
+        android:id="@+id/navbarContainer"
+        android:layout_width="0dp"
+        android:layout_height="76dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <ImageButton
+            android:id="@+id/briefcaseIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ECEFEF"
+            android:contentDescription="@string/already_have_an_account_login"
+            android:padding="36dp"
+            android:src="@drawable/noopps"
+            tools:ignore="ImageContrastCheck" />
+
+        <ImageButton
+            android:id="@+id/bellIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ECEFEF"
+
+            android:contentDescription="@string/email"
+            android:padding="36dp"
+            android:src="@drawable/notifs" />
+
+        <ImageButton
+            android:id="@+id/profile"
+            android:layout_width="wrap_content"
+            android:layout_height="500dp"
+
+            android:background="#ECEFEF"
+            android:contentDescription="@string/enter_your_password"
+
+            android:padding="36dp"
+            android:src="@drawable/profile" />
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
