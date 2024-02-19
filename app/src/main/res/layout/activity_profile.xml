@@ -1,145 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ECEFEF">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ECEFEF">
 
-    <ImageButton
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/enter_your_password"
-        android:padding="16dp"
-        android:src="@drawable/back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/enter_your_password"
+            android:padding="16dp"
+            android:src="@drawable/back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imgEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/filters"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/imgEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:padding="16dp"
+            android:src="@drawable/filters"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/profileBar"
+        <ImageView
+            android:id="@+id/profilePhoto"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/pfp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/back" />
+
+
+        <TextView
+            android:id="@+id/txtProfileCompletionStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="60% profile completed"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/profilePhoto"
+            app:layout_constraintStart_toStartOf="@id/profilePhoto"
+            app:layout_constraintTop_toBottomOf="@id/profilePhoto" />
+
+        <TextView
+            android:id="@+id/txtUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="John Singh"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/txtProfileCompletionStatus"
+            app:layout_constraintStart_toStartOf="@id/txtProfileCompletionStatus"
+            app:layout_constraintTop_toBottomOf="@id/txtProfileCompletionStatus" />
+
+        <TextView
+            android:id="@+id/txtJobTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Creative Designer"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/txtUserName"
+            app:layout_constraintStart_toStartOf="@id/txtUserName"
+            app:layout_constraintTop_toBottomOf="@id/txtUserName" />
+
+        <TextView
+            android:id="@+id/txtCompanyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tecorb Technologies Private Limited"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/txtJobTitle"
+            app:layout_constraintStart_toStartOf="@id/txtJobTitle"
+            app:layout_constraintTop_toBottomOf="@id/txtJobTitle" />
+
+
+        <TextView
+            android:id="@+id/lastUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Last update today"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintEnd_toEndOf="@+id/profilePhoto"
+            app:layout_constraintStart_toStartOf="@+id/profilePhoto"
+            app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/contentCard"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/white"
+        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:progress="60"
-        android:src="@drawable/pfp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtCompanyName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/back" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/profileCompletionBar"
-        android:layout_marginTop="16dp"
-        android:progress="60"
-        app:layout_constraintEnd_toEndOf="@+id/profileBar"
-        app:layout_constraintStart_toStartOf="@id/profileBar"
-        app:layout_constraintTop_toBottomOf="@id/profileBar" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Recommended Jobs Section -->
+            <TextView
+                android:id="@+id/txtRecommendedJobs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Recommended Jobs"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <TextView
+                android:id="@+id/txtJobRole"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Creative Designer"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+            <TextView
+                android:id="@+id/txtNIIT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="NIIT"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/txtYourJobSearches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Your Job Searches"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="UI/UX Designer"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/txtProfileCompletionStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="60% profile completed"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="@+id/profileCompletionBar"
-        app:layout_constraintStart_toStartOf="@id/profileCompletionBar"
-        app:layout_constraintTop_toBottomOf="@id/profileCompletionBar" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/txtUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="John Singh"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="@+id/txtProfileCompletionStatus"
-        app:layout_constraintStart_toStartOf="@id/txtProfileCompletionStatus"
-        app:layout_constraintTop_toBottomOf="@id/txtProfileCompletionStatus" />
 
-    <TextView
-        android:id="@+id/txtJobTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Creative Designer"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="@+id/txtUserName"
-        app:layout_constraintStart_toStartOf="@id/txtUserName"
-        app:layout_constraintTop_toBottomOf="@id/txtUserName" />
 
-    <TextView
-        android:id="@+id/txtCompanyName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tecorb Technologies Private Limited"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="@+id/txtJobTitle"
-        app:layout_constraintStart_toStartOf="@id/txtJobTitle"
-        app:layout_constraintTop_toBottomOf="@id/txtJobTitle" />
 
     <LinearLayout
-        android:id="@+id/navbarContainer"
-        android:layout_width="0dp"
-        android:layout_height="76dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
+            android:id="@+id/navbarContainer"
+            android:layout_width="0dp"
+            android:layout_height="76dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <ImageButton
-            android:id="@+id/briefcaseIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#ECEFEF"
-            android:contentDescription="@string/already_have_an_account_login"
-            android:padding="36dp"
-            android:src="@drawable/noopps"
-            tools:ignore="ImageContrastCheck" />
+            <ImageButton
+                android:id="@+id/briefcaseIcon"
+                android:layout_width="159dp"
+                android:layout_height="wrap_content"
+                android:background="#ECEFEF"
+                android:contentDescription="@string/already_have_an_account_login"
+                android:padding="36dp"
+                android:src="@drawable/noopps"
+                tools:ignore="ImageContrastCheck" />
 
-        <ImageButton
-            android:id="@+id/bellIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#ECEFEF"
+            <ImageButton
+                android:id="@+id/profile"
+                android:layout_width="159dp"
+                android:layout_height="500dp"
 
-            android:contentDescription="@string/email"
-            android:padding="36dp"
-            android:src="@drawable/notifs" />
+                android:background="#ECEFEF"
+                android:contentDescription="@string/enter_your_password"
 
-        <ImageButton
-            android:id="@+id/profile"
-            android:layout_width="wrap_content"
-            android:layout_height="500dp"
-
-            android:background="#ECEFEF"
-            android:contentDescription="@string/enter_your_password"
-
-            android:padding="36dp"
-            android:src="@drawable/profile" />
+                android:padding="36dp"
+                android:src="@drawable/profile" />
 
 
-    </LinearLayout>
+        </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
