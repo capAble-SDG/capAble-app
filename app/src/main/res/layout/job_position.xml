@@ -22,15 +22,16 @@
         android:textColor="#000000"
     android:text="Job Title"
     android:textSize="24sp"
-    android:layout_marginBottom="4dp"/>
+    android:layout_marginBottom="2dp"/>
 
-    <!-- Company Name -->
     <TextView
         android:id="@+id/jobCompany"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+
         android:text="Company Name"
-        android:textSize="16sp"
+        android:textSize="24sp"
         android:textColor="#757575"
     android:layout_marginBottom="4dp"/>
 
@@ -38,6 +39,7 @@
         android:id="@+id/jobRating"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
     android:drawablePadding="8dp"
     android:text="Rating: 5.0"
     android:textSize="14sp"
