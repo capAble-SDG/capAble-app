@@ -203,6 +203,7 @@
         android:layout_height="72dp"
         android:src="@drawable/navbar"
         android:scaleType="fitXY"
+        android:background="#ECEFEFEF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -225,7 +226,7 @@
             android:background="#ECEFEF"
             android:contentDescription="@string/already_have_an_account_login"
             android:padding="36dp"
-            android:src="@drawable/opps"
+            android:src="@drawable/noopps"
             tools:ignore="ImageContrastCheck" />
 
         <ImageButton

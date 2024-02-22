@@ -156,6 +156,12 @@ class SignUpActivity: AppCompatActivity() {
                 val name = firebaseUser?.displayName ?: ""
                 val email = firebaseUser?.email ?: ""
 
+                val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+                with (sharedPref.edit()) {
+                    putString("fullName", name)
+                    apply()
+                }
+
                 // check if user already exists
                 checkUserInFirestore(name, email)
             } else {
@@ -214,6 +220,11 @@ class SignUpActivity: AppCompatActivity() {
             .add(user)
             .addOnSuccessListener { documentReference ->
                 println("User added with ID: ${documentReference.id}")
+                val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+                with (sharedPref.edit()) {
+                    putString("fullName", fullName)
+                    apply()
+                }
             }
             .addOnFailureListener { e ->
                 println("Error adding user $e")

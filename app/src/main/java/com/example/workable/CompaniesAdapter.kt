@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 
 class CompaniesAdapter(private var companies: List<Company>) :
@@ -38,6 +40,7 @@ class CompaniesAdapter(private var companies: List<Company>) :
                 .load(company.logo)
                 .placeholder(com.google.firebase.database.R.drawable.common_google_signin_btn_icon_dark) // placeholder if not found
                 .diskCacheStrategy(DiskCacheStrategy.ALL) // caching
+                .transform(CenterInside(), RoundedCorners(24))
                 .into(companyLogo)
         }
     }

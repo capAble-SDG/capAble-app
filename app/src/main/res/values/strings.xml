@@ -23,4 +23,9 @@
     <string name="fill_in_your_resume_to_have_a_nbetter_shot_at_getting_hired">Fill in your resume to have a \nbetter shot at getting hired!</string>
     <string name="recommended_for_you">Recommended for you</string>
     <string name="top_companies">Top Companies</string>
+    <string name="job_title">Job Title</string>
+    <string name="company_name">Company Name</string>
+    <string name="full_time">Full Time</string>
+    <string name="remote">Remote</string>
+    <string name="salary_5000_6000">Salary: $5000-$6000</string>
 </resources>

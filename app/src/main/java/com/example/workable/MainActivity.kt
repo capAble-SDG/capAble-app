@@ -1,5 +1,6 @@
 package com.example.workable
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +16,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-
+import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MainActivity : ComponentActivity() {
@@ -28,6 +34,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val searchView: SearchView = findViewById(R.id.searchView)
+
         val closeResumeBox: ImageButton = findViewById(R.id.closeResumeBox)
         val resumeBox: LinearLayout = findViewById(R.id.resumeBox)
         closeResumeBox.setOnClickListener {
@@ -38,9 +46,6 @@ class MainActivity : ComponentActivity() {
         profile.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
-
-
-
 
         val topCompaniesRecyclerView: RecyclerView = findViewById(R.id.topCompaniesRecyclerView)
 
@@ -65,31 +70,73 @@ class MainActivity : ComponentActivity() {
         }
 
 
+        if (DataCache.topCompanies.isNotEmpty()) {
+            updateTopCompaniesUI(DataCache.topCompanies)
+        }
+        if (DataCache.recommendedJobs.isNotEmpty()) {
+            updateRecommendedJobsUI(DataCache.recommendedJobs)
+        } else {
+            // No cached data, fetch from Firestore
+            fetchOpportunities()
+        }
 
-        fetchOpportunities()
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // When query submitted, filter both lists
+                query?.let {
+                    filterTopCompanies(it)
+                    filterRecommendedJobs(it)
+                }
+                return false
+            }
+        override fun onQueryTextChange(newText: String?): Boolean {
+            // As the user types, filter both lists
+            newText?.let {
+                filterTopCompanies(it)
+                filterRecommendedJobs(it)
+            }
+            return false
+        }
+    })
 
     }
 
+
+    private fun filterTopCompanies(query: String) {
+        val filteredList = DataCache.topCompanies.filter {
+            it.name.contains(query, ignoreCase = true) ||
+                    (it.logo?.contains(query, ignoreCase = true) ?: false)
+        }
+        val topCompaniesRecyclerView: RecyclerView = findViewById(R.id.topCompaniesRecyclerView)
+        (topCompaniesRecyclerView.adapter as CompaniesAdapter).updateData(filteredList)
+    }
+
+    private fun filterRecommendedJobs(query: String) {
+        val filteredList = DataCache.recommendedJobs.filter {
+            it.title.contains(query, ignoreCase = true) ||
+                    it.company.contains(query, ignoreCase = true)
+        }
+        updateRecommendedJobsUI(filteredList)
+    }
+
     private fun fetchOpportunities() {
-        db.collection("opportunities1")
+        db.collection("opportunities")
             .get()
             .addOnSuccessListener { documents ->
-                //recommendedJobs.clear()
-
-                val companiesSet = mutableSetOf<String>()
-                val jobPositionsSet = mutableSetOf<String>()
-                val companies = mutableListOf<Company>()
-                val companyLogos = mutableListOf<String>()
-                val jobPositions = mutableListOf<JobPosition>()
-
+                DataCache.topCompanies.clear()
+                DataCache.recommendedJobs.clear()
 
                 for (document in documents) {
                     val companyName = document.getString("Company") ?: "Unknown"
                     val companyLogo = document.getString("CompanyLogo")
-                    val jobTitle = document.getString("Job") ?: "Unknown"
+                    val jobTitle = document.getString("Role") ?: "Unknown"
 
+                    if (!DataCache.topCompanies.any { it.name == companyName }) {
+                        val company = Company(name = companyName, logo = companyLogo)
+                        DataCache.topCompanies.add(company)
+                    }
 
-                    val newJobPosition = JobPosition(
+                    val jobPosition = JobPosition(
                         title = jobTitle,
                         company = companyName,
                         rating = 5.0f,  // replace with actual logic to determine the rating
@@ -97,57 +144,21 @@ class MainActivity : ComponentActivity() {
                         location = document.getString("Location") ?: "N/A",
                         salaryRange = document.getString("Pay") ?: "N/A"
                     )
-                    if (newJobPosition !in recommendedJobs) {
-                        recommendedJobs.add(newJobPosition)
-                    }
-                    if (!companiesSet.contains(companyName)) {
-                        val company = Company(
-                            name = companyName,
-                            logo = companyLogo // replace with actual logic to determine the logo
-                        )
-                        companies.add(company)
-                        companiesSet.add(companyName)
-                        companyLogos.add(companyLogo!!)
+                    if (!DataCache.recommendedJobs.any { it.title == jobTitle && it.company == companyName }) {
+                        DataCache.recommendedJobs.add(jobPosition)
                     }
 
-                    if (!jobPositionsSet.contains(jobTitle)) {
-                        val jobPosition = JobPosition(
-                            title = jobTitle,
-                            company = companyName,
 
-                            rating = 5.0f,  // replace with actual logic to determine the rating
-                            jobType = document.getString("EmploymentType") ?: "N/A",
-                            location = document.getString("Location") ?: "N/A",
-                            salaryRange = document.getString("Pay") ?: "N/A"
-                        )
-                        jobPositions.add(jobPosition)
-                        jobPositionsSet.add(jobTitle)
-                        //recommendedJobs.add(jobPosition)
-
-                    }
                 }
 
-                runOnUiThread {
-                    //recommendedJobs.addAll(jobPositions)
-                    updateRecommendedJobsUI()
-                }
-                val sortedCompanies =
-                    companies.sortedWith(compareBy<Company> { it.logo.isNullOrEmpty() }.thenBy { it.name })
+                GlobalScope.launch(Dispatchers.IO) {
+                    val recommendedJobs = DataCache.recommendedJobs
+                    val topCompanies = DataCache.topCompanies
 
-
-                val recommendedJobsContainer: LinearLayout =
-                    findViewById(R.id.recommendedJobsContainer)
-                val topCompaniesRecyclerView: RecyclerView =
-                    findViewById(R.id.topCompaniesRecyclerView)
-
-                (topCompaniesRecyclerView.adapter as CompaniesAdapter).updateData(sortedCompanies)
-
-                // adding new views
-                jobPositions.forEach { jobPosition ->
-                    val jobView = LayoutInflater.from(this)
-                        .inflate(R.layout.job_position, recommendedJobsContainer, false)
-                    bindJobView(jobView, jobPosition)
-                    recommendedJobsContainer.addView(jobView)
+                    withContext(Dispatchers.Main) {
+                        updateRecommendedJobsUI(recommendedJobs)
+                        updateTopCompaniesUI(topCompanies)
+                    }
                 }
             }
             .addOnFailureListener { exception ->
@@ -155,23 +166,29 @@ class MainActivity : ComponentActivity() {
             }
     }
 
+    private fun updateTopCompaniesUI(companies: List<Company>) {
+        val companiesWithLogos = companies.filter { !it.logo.isNullOrEmpty() }
+        val sortedCompaniesWithLogos = companiesWithLogos.sortedBy { it.name }
 
+        val topCompaniesRecyclerView: RecyclerView = findViewById(R.id.topCompaniesRecyclerView)
+        (topCompaniesRecyclerView.adapter as CompaniesAdapter).updateData(sortedCompaniesWithLogos)
+    }
 
-    private fun updateRecommendedJobsUI() {
+    private fun updateRecommendedJobsUI(jobPositions: List<JobPosition>) {
         val recommendedJobsContainer: LinearLayout = findViewById(R.id.recommendedJobsContainer)
-        recommendedJobsContainer.removeAllViews() // Clear existing views
-
-        for (jobPosition in recommendedJobs) {
+        recommendedJobsContainer.removeAllViews()
+        jobPositions.forEach { jobPosition ->
             val jobView = LayoutInflater.from(this).inflate(R.layout.job_position, recommendedJobsContainer, false)
             bindJobView(jobView, jobPosition)
             recommendedJobsContainer.addView(jobView)
         }
     }
 
+
     private fun bindJobView(view: View, jobPosition: JobPosition) {
         view.findViewById<TextView>(R.id.jobTitle).text = jobPosition.title
         view.findViewById<TextView>(R.id.jobCompany).text = jobPosition.company
-        view.findViewById<TextView>(R.id.jobRating).text = "Rating: ${jobPosition.rating}"
+        //view.findViewById<TextView>(R.id.jobRating).text = "Rating: ${jobPosition.rating}"
         view.findViewById<TextView>(R.id.jobType).text = jobPosition.jobType
         view.findViewById<TextView>(R.id.jobLocation).text = "Location: ${jobPosition.location}"
         view.findViewById<TextView>(R.id.jobSalary).text = "Salary: ${jobPosition.salaryRange}"

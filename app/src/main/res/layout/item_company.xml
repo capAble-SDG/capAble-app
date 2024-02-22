@@ -15,8 +15,10 @@
             android:id="@+id/companyLogo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="24dp"
+            android:padding="8dp"
             android:background="#D0ECF2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:scaleType="fitCenter" />
     </androidx.cardview.widget.CardView>
 
