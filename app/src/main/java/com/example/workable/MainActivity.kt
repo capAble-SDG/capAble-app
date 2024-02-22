@@ -76,13 +76,11 @@ class MainActivity : ComponentActivity() {
         if (DataCache.recommendedJobs.isNotEmpty()) {
             updateRecommendedJobsUI(DataCache.recommendedJobs)
         } else {
-            // No cached data, fetch from Firestore
             fetchOpportunities()
         }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                // When query submitted, filter both lists
                 query?.let {
                     filterTopCompanies(it)
                     filterRecommendedJobs(it)
@@ -90,7 +88,6 @@ class MainActivity : ComponentActivity() {
                 return false
             }
         override fun onQueryTextChange(newText: String?): Boolean {
-            // As the user types, filter both lists
             newText?.let {
                 filterTopCompanies(it)
                 filterRecommendedJobs(it)
@@ -147,8 +144,18 @@ class MainActivity : ComponentActivity() {
                     if (!DataCache.recommendedJobs.any { it.title == jobTitle && it.company == companyName }) {
                         DataCache.recommendedJobs.add(jobPosition)
                     }
+                }
 
-
+                if (DataCache.recommendedJobs.size >= 2) {
+                    val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+                    with(sharedPref.edit()) {
+                        val gson = Gson()
+                        val job1Json = gson.toJson(DataCache.recommendedJobs[0])
+                        val job2Json = gson.toJson(DataCache.recommendedJobs[1])
+                        putString("topJob1", job1Json)
+                        putString("topJob2", job2Json)
+                        apply()
+                    }
                 }
 
                 GlobalScope.launch(Dispatchers.IO) {

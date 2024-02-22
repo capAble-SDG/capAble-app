@@ -28,4 +28,7 @@
     <string name="full_time">Full Time</string>
     <string name="remote">Remote</string>
     <string name="salary_5000_6000">Salary: $5000-$6000</string>
+    <string name="edit_details">Edit Details</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>

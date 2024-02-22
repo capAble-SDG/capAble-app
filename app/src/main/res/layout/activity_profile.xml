@@ -6,8 +6,6 @@
         android:layout_height="match_parent"
         android:background="#ecefef">
 
-
-
         <ImageButton
             android:id="@+id/back"
             android:layout_width="wrap_content"
@@ -61,6 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="John Singh"
+            android:textSize="24sp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="@+id/profile_completion"
@@ -71,8 +70,9 @@
             android:id="@+id/txtJobTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Creative Designer"
+            android:text="Job Title"
             android:textColor="@color/black"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/txtUserName"
             app:layout_constraintStart_toStartOf="@id/txtUserName"
             app:layout_constraintTop_toBottomOf="@id/txtUserName" />
@@ -81,8 +81,10 @@
             android:id="@+id/txtCompanyName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tecorb Technologies Private Limited"
+            android:text="Company Name"
             android:textColor="@color/black"
+            android:textSize="18sp"
+
             app:layout_constraintEnd_toEndOf="@+id/txtJobTitle"
             app:layout_constraintStart_toStartOf="@id/txtJobTitle"
             app:layout_constraintTop_toBottomOf="@id/txtJobTitle" />
@@ -91,16 +93,18 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/contentCard"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
         app:cardBackgroundColor="@color/white"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@id/navbarContainer"
         app:layout_constraintTop_toBottomOf="@+id/txtCompanyName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -176,12 +180,9 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-
-
-
         <LinearLayout
             android:id="@+id/navbarContainer"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="76dp"
             android:layout_marginTop="40dp"
             android:gravity="center"
@@ -207,7 +208,7 @@
                 android:layout_height="500dp"
 
                 android:background="#FFFFFF"
-                android:contentDescription="@string/enter_your_password"
+                android:contentDescription= "@string/enter_your_password"
 
                 android:padding="36dp"
                 android:src="@drawable/profile" />
