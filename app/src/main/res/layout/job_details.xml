@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="128dp"
+    android:maxWidth="450dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="96dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardCornerRadius="20dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <ImageView
+            android:id="@+id/jobDetailLogo"
+            android:layout_width="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/jobDetailTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Product Designer"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            android:id="@+id/jobDetailCompany"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Microsoft Inc"
+            android:textSize="28sp"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/jobDetailLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1600 Amphitheatre Parkway, Mountain view"
+            android:textSize="22sp"
+            android:layout_marginTop="4dp"/>
+
+<!--        <TextView-->
+<!--            android:id="@+id/jobDetailDescription"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:textSize="14sp"-->
+<!--            android:text="Job Description"/>-->
+
+        <TextView
+            android:id="@+id/jobDetailExperience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:text="Experience:"/>
+
+        <TextView
+            android:id="@+id/jobDetailPay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:text="Pay:"/>
+
+
+        <Button
+            android:id="@+id/applyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="54dp"
+            android:backgroundTint="@color/black"
+            android:layout_marginBottom="16dp"
+            android:text="Apply Now"
+            android:textStyle="bold"
+
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_background"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"/>
+
+    </LinearLayout>
+    </ScrollView>
+</androidx.cardview.widget.CardView>

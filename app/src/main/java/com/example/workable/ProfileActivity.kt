@@ -64,7 +64,7 @@ class ProfileActivity : AppCompatActivity() {
         view.findViewById<TextView>(R.id.jobTitle).text = jobPosition.title
         view.findViewById<TextView>(R.id.jobCompany).text = jobPosition.company
         view.findViewById<TextView>(R.id.jobLocation).text = jobPosition.location
-        view.findViewById<TextView>(R.id.jobSalary).text = jobPosition.salaryRange
+//        view.findViewById<TextView>(R.id.jobSalary).text = jobPosition.salaryRange
 
     }
 

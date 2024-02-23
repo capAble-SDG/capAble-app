@@ -55,15 +55,15 @@
         android:textSize="14sp" />
 
 
-    <TextView
-        android:id="@+id/jobSalary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/salary_5000_6000"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:textColor="#4CAF50"
-    android:layout_marginBottom="4dp"/>
+<!--    <TextView-->
+<!--        android:id="@+id/jobSalary"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/salary_5000_6000"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textColor="#4CAF50"-->
+<!--    android:layout_marginBottom="4dp"/>-->
 
 </LinearLayout>
     </androidx.cardview.widget.CardView>

@@ -1,12 +1,21 @@
 package com.example.workable
+import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
+import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
@@ -127,20 +136,30 @@ class MainActivity : ComponentActivity() {
                     val companyName = document.getString("Company") ?: "Unknown"
                     val companyLogo = document.getString("CompanyLogo")
                     val jobTitle = document.getString("Role") ?: "Unknown"
+                    val jobDescription = document.getString("Description") ?: "Description not available"
+                    val jobExperience = document.getString("Experience") ?: "Experience not available"
+                    val jobPay = document.getString("Pay") ?: "Salary not disclosed"
+                    val jobPostingUrl = document.getString("JobPostingUrl") ?: ""
 
                     if (!DataCache.topCompanies.any { it.name == companyName }) {
                         val company = Company(name = companyName, logo = companyLogo)
                         DataCache.topCompanies.add(company)
                     }
 
-                    val jobPosition = JobPosition(
-                        title = jobTitle,
-                        company = companyName,
-                        rating = 5.0f,  // replace with actual logic to determine the rating
-                        jobType = document.getString("EmploymentType") ?: "N/A",
-                        location = document.getString("Location") ?: "N/A",
-                        salaryRange = document.getString("Pay") ?: "N/A"
-                    )
+                        val jobPosition = JobPosition(
+                            title = jobTitle,
+                            company = companyName,
+                            rating = 5.0f,  // replace with actual logic to determine the rating
+                            jobType = document.getString("EmploymentType") ?: "N/A",
+                            location = document.getString("Location") ?: "N/A",
+                            salaryRange = document.getString("Pay") ?: "N/A",
+                            description = jobDescription,
+                            experience = jobExperience,
+                            pay = jobPay,
+                            jobPostingUrl = jobPostingUrl,
+                            companyLogo = companyLogo ?: ""
+
+                        )
                     if (!DataCache.recommendedJobs.any { it.title == jobTitle && it.company == companyName }) {
                         DataCache.recommendedJobs.add(jobPosition)
                     }
@@ -198,6 +217,61 @@ class MainActivity : ComponentActivity() {
         //view.findViewById<TextView>(R.id.jobRating).text = "Rating: ${jobPosition.rating}"
         view.findViewById<TextView>(R.id.jobType).text = jobPosition.jobType
         view.findViewById<TextView>(R.id.jobLocation).text = "Location: ${jobPosition.location}"
-        view.findViewById<TextView>(R.id.jobSalary).text = "Salary: ${jobPosition.salaryRange}"
+//        view.findViewById<TextView>(R.id.jobSalary).text = "Salary: ${jobPosition.salaryRange}"
+        view.setOnClickListener {
+            openJobDetail(jobPosition)
+        }
     }
+    private fun openJobDetail(jobPosition: JobPosition) {
+        val detailView = LayoutInflater.from(this).inflate(R.layout.job_details, null)
+        val imageViewLogo = detailView.findViewById<ImageView>(R.id.jobDetailLogo)
+
+        if (jobPosition.companyLogo.isNotEmpty()) {
+            Glide.with(this)
+                .load(jobPosition.companyLogo)
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_background)
+                .into(imageViewLogo)
+        } else {
+            imageViewLogo.setImageResource(R.drawable.ic_launcher_background)
+        }
+        detailView.findViewById<TextView>(R.id.jobDetailTitle).text = jobPosition.title
+        detailView.findViewById<TextView>(R.id.jobDetailCompany).text = jobPosition.company
+        detailView.findViewById<TextView>(R.id.jobDetailLocation).text = jobPosition.location
+
+        val experienceTextView = detailView.findViewById<TextView>(R.id.jobDetailExperience)
+        if (jobPosition.experience.isNotEmpty()) {
+            experienceTextView.text = "Experience: "+ jobPosition.experience
+        } else {
+            experienceTextView.visibility = View.GONE
+        }
+
+        val payTextView = detailView.findViewById<TextView>(R.id.jobDetailPay)
+        payTextView.text = if (jobPosition.pay.isNotEmpty()) "Salary: " + jobPosition.pay else "Salary Not Disclosed"
+
+        detailView.findViewById<Button>(R.id.applyButton).setOnClickListener {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(jobPosition.jobPostingUrl))
+            startActivity(browserIntent)
+        }
+
+        val dialog = AlertDialog.Builder(this, R.style.CustomAlertDialog)
+            .setView(detailView)
+            .create()
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window?.apply {
+            val params = WindowManager.LayoutParams()
+            params.copyFrom(dialog.window?.attributes)
+            params.width = WindowManager.LayoutParams.MATCH_PARENT
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT
+            dialog.window?.attributes = params
+            setLayout((resources.displayMetrics.widthPixels * 0.9).toInt(), WindowManager.LayoutParams.WRAP_CONTENT)
+            setGravity(Gravity.CENTER)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setDimAmount(0.2f)
+        }
+        dialog.show()
+    }
+
+
 }
