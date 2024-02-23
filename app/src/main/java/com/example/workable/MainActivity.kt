@@ -1,8 +1,8 @@
 package com.example.workable
 import android.app.AlertDialog
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -34,6 +34,10 @@ import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
 
+    companion object {
+        private const val TAG = "ProfileActivity"
+    }
+
     private val db = Firebase.firestore
     private var topCompanies = mutableListOf<Company>()
 
@@ -49,6 +53,11 @@ class MainActivity : ComponentActivity() {
         val resumeBox: LinearLayout = findViewById(R.id.resumeBox)
         closeResumeBox.setOnClickListener {
             resumeBox.visibility = View.GONE
+        }
+
+        intent.getStringExtra("searchQuery")?.let { searchQuery ->
+            val searchView: SearchView = findViewById(R.id.searchView)
+            searchView.setQuery(searchQuery, true) // true to submit the query
         }
 
         val profile: ImageButton = findViewById(R.id.profile)
@@ -91,6 +100,15 @@ class MainActivity : ComponentActivity() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
+                    // saves the search query
+                    val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+                    val searches = getSearchQueries(sharedPref) + it
+                    val limitedSearches = searches.takeLast(2) // Keep only the last two searches
+                    with(sharedPref.edit()) {
+                        putString("searchQueries", Gson().toJson(limitedSearches))
+                        apply()
+                    }
+
                     filterTopCompanies(it)
                     filterRecommendedJobs(it)
                 }
@@ -105,6 +123,11 @@ class MainActivity : ComponentActivity() {
         }
     })
 
+    }
+
+    private fun getSearchQueries(sharedPref: SharedPreferences): List<String> {
+        val json = sharedPref.getString("searchQueries", "[]")
+        return Gson().fromJson(json, Array<String>::class.java).toList()
     }
 
 
@@ -160,20 +183,10 @@ class MainActivity : ComponentActivity() {
                             companyLogo = companyLogo ?: ""
 
                         )
+                    Log.d(TAG, "Fetched job: $jobTitle at $companyName")
+
                     if (!DataCache.recommendedJobs.any { it.title == jobTitle && it.company == companyName }) {
                         DataCache.recommendedJobs.add(jobPosition)
-                    }
-                }
-
-                if (DataCache.recommendedJobs.size >= 2) {
-                    val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
-                    with(sharedPref.edit()) {
-                        val gson = Gson()
-                        val job1Json = gson.toJson(DataCache.recommendedJobs[0])
-                        val job2Json = gson.toJson(DataCache.recommendedJobs[1])
-                        putString("topJob1", job1Json)
-                        putString("topJob2", job2Json)
-                        apply()
                     }
                 }
 
@@ -203,6 +216,8 @@ class MainActivity : ComponentActivity() {
     private fun updateRecommendedJobsUI(jobPositions: List<JobPosition>) {
         val recommendedJobsContainer: LinearLayout = findViewById(R.id.recommendedJobsContainer)
         recommendedJobsContainer.removeAllViews()
+        Log.d(TAG, "Updating UI with ${jobPositions.size} jobs")
+
         jobPositions.forEach { jobPosition ->
             val jobView = LayoutInflater.from(this).inflate(R.layout.job_position, recommendedJobsContainer, false)
             bindJobView(jobView, jobPosition)

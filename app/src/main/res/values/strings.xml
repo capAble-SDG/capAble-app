@@ -31,4 +31,6 @@
     <string name="edit_details">Edit Details</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="recommended_jobs">Recommended Jobs</string>
+    <string name="your_job_searches">Your Job Searches</string>
 </resources>
