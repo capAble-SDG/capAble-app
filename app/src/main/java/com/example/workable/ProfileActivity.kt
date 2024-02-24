@@ -9,6 +9,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 
@@ -154,20 +156,44 @@ class ProfileActivity : AppCompatActivity() {
         jobSearchesContainer.removeAllViews()
 
         searches.forEach { search ->
-            val searchView = TextView(this).apply {
-                text = search
-                setTextColor(Color.BLACK)
-                textSize = 20f
-
-                setOnClickListener {
-                    val intent = Intent(this@ProfileActivity, MainActivity::class.java)
-                    intent.putExtra("searchQuery", search)
-                    startActivity(intent)
+            val cardView = CardView(this).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    bottomMargin = 16
+                    leftMargin = 16
                 }
+                radius = 18f
+                cardElevation = 4f
+                setContentPadding(24, 16, 16, 16)
+                setCardBackgroundColor(Color.parseColor("#ECEFEF"))
             }
-            jobSearchesContainer.addView(searchView)
+
+            val searchTextView = TextView(this).apply {
+                text = search
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
+                setTextColor(Color.BLACK)
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+            }
+
+            cardView.addView(searchTextView)
+            jobSearchesContainer.addView(cardView)
+
+            cardView.setOnClickListener {
+                val intent = Intent(this, MainActivity::class.java).apply {
+                    putExtra("searchQuery", search)
+                }
+                startActivity(intent)
+            }
         }
     }
+
+
+
 
     private fun showEditDialog() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_edit_job, null)
