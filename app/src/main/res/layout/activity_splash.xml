@@ -5,37 +5,36 @@
     android:layout_height="match_parent"
     android:background="#ECEFEF">
 
-    <ImageView
-        android:id="@+id/bg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-57dp"
-        android:src="@drawable/bg"
-        android:elevation="10dp"
-        tools:ignore="ImageContrastCheck" />
+   <ImageView
+    android:id="@+id/bg"
+    android:layout_width="match_parent"
+    android:layout_height="420dp"
+    android:layout_marginTop="0dp"
+    android:elevation="10dp"
+    android:src="@drawable/bg"
+    android:scaleType="fitXY"
+    tools:ignore="ImageContrastCheck" />
 
     <ImageView
         android:id="@+id/workable"
         android:layout_width="206dp"
         android:elevation="10dp"
         android:layout_height="83dp"
-        android:layout_marginTop="440dp"
+        android:layout_marginTop="460dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/workable" />
+        android:src="@drawable/capable" />
 
 
     <Button
     android:id="@+id/signupButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="550dp"
+    android:layout_marginTop="570dp"
     android:layout_centerHorizontal="true"
     android:text="@string/sign_up"
         android:textColor="#FFFFFF"
-
     android:background="@drawable/signup"
         android:textSize="20sp"
-
     android:textAllCaps="false" />
 
     <Button
