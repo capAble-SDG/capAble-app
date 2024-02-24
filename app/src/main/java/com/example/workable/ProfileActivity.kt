@@ -97,54 +97,8 @@ class ProfileActivity : AppCompatActivity() {
         }
 
     private fun openJobDetail(jobPosition: JobPosition) {
-        val detailView = LayoutInflater.from(this).inflate(R.layout.job_details, null)
-        val imageViewLogo = detailView.findViewById<ImageView>(R.id.jobDetailLogo)
-
-        if (jobPosition.companyLogo.isNotEmpty()) {
-            Glide.with(this)
-                .load(jobPosition.companyLogo)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
-                .into(imageViewLogo)
-        } else {
-            imageViewLogo.setImageResource(R.drawable.ic_launcher_background)
-        }
-        detailView.findViewById<TextView>(R.id.jobDetailTitle).text = jobPosition.title
-        detailView.findViewById<TextView>(R.id.jobDetailCompany).text = jobPosition.company
-        detailView.findViewById<TextView>(R.id.jobDetailLocation).text = jobPosition.location
-
-        val experienceTextView = detailView.findViewById<TextView>(R.id.jobDetailExperience)
-        if (jobPosition.experience.isNotEmpty()) {
-            experienceTextView.text = "Experience: "+ jobPosition.experience
-        } else {
-            experienceTextView.visibility = View.GONE
-        }
-
-        val payTextView = detailView.findViewById<TextView>(R.id.jobDetailPay)
-        payTextView.text = if (jobPosition.pay.isNotEmpty()) "Salary: " + jobPosition.pay else "Salary Not Disclosed"
-
-        detailView.findViewById<Button>(R.id.applyButton).setOnClickListener {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(jobPosition.jobPostingUrl))
-            startActivity(browserIntent)
-        }
-
-        val dialog = android.app.AlertDialog.Builder(this, R.style.CustomAlertDialog)
-            .setView(detailView)
-            .create()
-
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.window?.apply {
-            val params = WindowManager.LayoutParams()
-            params.copyFrom(dialog.window?.attributes)
-            params.width = WindowManager.LayoutParams.MATCH_PARENT
-            params.height = WindowManager.LayoutParams.WRAP_CONTENT
-            dialog.window?.attributes = params
-            setLayout((resources.displayMetrics.widthPixels * 0.9).toInt(), WindowManager.LayoutParams.WRAP_CONTENT)
-            setGravity(Gravity.CENTER)
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            setDimAmount(0.2f)
-        }
-        dialog.show()
+        val jobDetailBottomSheetFragment = JobDetails.newInstance(jobPosition)
+        jobDetailBottomSheetFragment.show(supportFragmentManager, "JobDetailsTag")
     }
 
     private fun showLastSearches() {

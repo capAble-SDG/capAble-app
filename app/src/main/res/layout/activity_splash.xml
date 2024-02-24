@@ -49,6 +49,4 @@
         android:textSize="20sp"
         android:background="@drawable/login"
         android:textAllCaps="false" />
-
-
 </RelativeLayout>

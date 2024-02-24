@@ -39,7 +39,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.WorkAble" />
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

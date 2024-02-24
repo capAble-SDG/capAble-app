@@ -1,25 +1,19 @@
 package com.example.workable
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.net.Uri
+
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
-import android.widget.Button
+
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
@@ -34,7 +28,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "ProfileActivity"
@@ -51,6 +45,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        supportActionBar?.hide()
 
         val searchView: SearchView = findViewById(R.id.searchView)
 
@@ -82,6 +77,17 @@ class MainActivity : ComponentActivity() {
                 .preload()
 
         }
+        val nestedScrollView: NestedScrollView = findViewById(R.id.scrollableView)
+        val mainLayout: ConstraintLayout = findViewById(R.id.mainLayout)
+
+        nestedScrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
+            if (scrollY > 500) {
+                mainLayout.setBackgroundColor(Color.parseColor("#FFFFFF"))
+            } else {
+                mainLayout.setBackgroundColor(Color.parseColor("#ECEFEF"))
+            }
+        })
+
 
         val recommendedJobsContainer: LinearLayout = findViewById(R.id.recommendedJobsContainer)
 
@@ -217,17 +223,6 @@ class MainActivity : ComponentActivity() {
                 showLoading(false)
 
             }
-
-        val nestedScrollView: NestedScrollView = findViewById(R.id.scrollableView)
-        val mainLayout: ConstraintLayout = findViewById(R.id.mainLayout)
-
-        nestedScrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
-            if (scrollY > 500) {
-                mainLayout.setBackgroundColor(Color.parseColor("#FFFFFF"))
-            } else {
-                mainLayout.setBackgroundColor(Color.parseColor("#ECEFEF"))
-            }
-        })
     }
 
 
@@ -258,7 +253,6 @@ class MainActivity : ComponentActivity() {
     private fun bindJobView(view: View, jobPosition: JobPosition) {
         view.findViewById<TextView>(R.id.jobTitle).text = jobPosition.title
         view.findViewById<TextView>(R.id.jobCompany).text = jobPosition.company
-        //view.findViewById<TextView>(R.id.jobRating).text = "Rating: ${jobPosition.rating}"
         view.findViewById<TextView>(R.id.jobType).text = jobPosition.jobType
         view.findViewById<TextView>(R.id.jobLocation).text = "Location: ${jobPosition.location}"
 //        view.findViewById<TextView>(R.id.jobSalary).text = "Salary: ${jobPosition.salaryRange}"
@@ -267,54 +261,8 @@ class MainActivity : ComponentActivity() {
         }
     }
     private fun openJobDetail(jobPosition: JobPosition) {
-        val detailView = LayoutInflater.from(this).inflate(R.layout.job_details, null)
-        val imageViewLogo = detailView.findViewById<ImageView>(R.id.jobDetailLogo)
-
-        if (jobPosition.companyLogo.isNotEmpty()) {
-            Glide.with(this)
-                .load(jobPosition.companyLogo)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
-                .into(imageViewLogo)
-        } else {
-            imageViewLogo.setImageResource(R.drawable.ic_launcher_background)
-        }
-        detailView.findViewById<TextView>(R.id.jobDetailTitle).text = jobPosition.title
-        detailView.findViewById<TextView>(R.id.jobDetailCompany).text = jobPosition.company
-        detailView.findViewById<TextView>(R.id.jobDetailLocation).text = jobPosition.location
-
-        val experienceTextView = detailView.findViewById<TextView>(R.id.jobDetailExperience)
-        if (jobPosition.experience.isNotEmpty()) {
-            experienceTextView.text = "Experience: "+ jobPosition.experience
-        } else {
-            experienceTextView.visibility = View.GONE
-        }
-
-        val payTextView = detailView.findViewById<TextView>(R.id.jobDetailPay)
-        payTextView.text = if (jobPosition.pay.isNotEmpty()) "Salary: " + jobPosition.pay else "Salary Not Disclosed"
-
-        detailView.findViewById<Button>(R.id.applyButton).setOnClickListener {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(jobPosition.jobPostingUrl))
-            startActivity(browserIntent)
-        }
-
-        val dialog = AlertDialog.Builder(this, R.style.CustomAlertDialog)
-            .setView(detailView)
-            .create()
-
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.window?.apply {
-            val params = WindowManager.LayoutParams()
-            params.copyFrom(dialog.window?.attributes)
-            params.width = WindowManager.LayoutParams.MATCH_PARENT
-            params.height = WindowManager.LayoutParams.WRAP_CONTENT
-            dialog.window?.attributes = params
-            setLayout((resources.displayMetrics.widthPixels * 0.9).toInt(), WindowManager.LayoutParams.WRAP_CONTENT)
-            setGravity(Gravity.CENTER)
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            setDimAmount(0.2f)
-        }
-        dialog.show()
+        val jobDetailBottomSheetFragment = JobDetails.newInstance(jobPosition)
+        jobDetailBottomSheetFragment.show(supportFragmentManager, "JobDetailsTag")
     }
 
 
