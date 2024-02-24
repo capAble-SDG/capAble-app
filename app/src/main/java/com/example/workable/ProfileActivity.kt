@@ -20,6 +20,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.marginLeft
 import com.bumptech.glide.Glide
 import com.example.workable.R
 import com.google.gson.Gson
@@ -151,9 +152,13 @@ class ProfileActivity : AppCompatActivity() {
             val searchView = TextView(this).apply {
                 text = search
                 setTextColor(Color.BLACK)
-                textSize = 18f
-                setPadding(12, 5, 0, 5)
+                textSize = 20f
 
+                setOnClickListener {
+                    val intent = Intent(this@ProfileActivity, MainActivity::class.java)
+                    intent.putExtra("searchQuery", search)
+                    startActivity(intent)
+                }
             }
             jobSearchesContainer.addView(searchView)
         }
