@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-        android:background="#ECEFEF"
+    android:background="#D0ECF2"
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
@@ -181,6 +181,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/topCompaniesRecyclerView" />
 
+
         <LinearLayout
             android:id="@+id/recommendedJobsContainer"
             android:layout_width="0dp"
@@ -190,7 +191,39 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recommendedForYou" />
+            app:layout_constraintTop_toBottomOf="@+id/recommendedForYou" >
+           <LinearLayout
+            android:id="@+id/loadingContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/recommendedForYou"
+            app:layout_constraintBottom_toTopOf="@id/recommendedJobsContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/loadingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Fetching Opportunities!"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="24sp"
+                android:layout_gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        </LinearLayout>
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -201,9 +234,7 @@
         android:id="@+id/navbarBackground"
         android:layout_width="0dp"
         android:layout_height="72dp"
-        android:src="@drawable/navbar"
         android:scaleType="fitXY"
-        android:background="#ECEFEFEF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -214,7 +245,7 @@
         android:layout_height="72dp"
         android:orientation="horizontal"
         android:gravity="center"
-        android:background="@android:color/transparent"
+        android:background="#ffffff"
         app:layout_constraintBottom_toBottomOf="@id/navbarBackground"
         app:layout_constraintStart_toStartOf="@id/navbarBackground"
         app:layout_constraintEnd_toEndOf="@id/navbarBackground">
@@ -223,7 +254,7 @@
             android:id="@+id/briefcaseIcon"
             android:layout_width="159dp"
             android:layout_height="wrap_content"
-            android:background="#ECEFEF"
+            android:background="#ffffff"
             android:contentDescription="@string/already_have_an_account_login"
             android:padding="36dp"
             android:src="@drawable/noopps"
@@ -234,7 +265,7 @@
             android:layout_width="159dp"
             android:layout_height="500dp"
 
-            android:background="#ECEFEF"
+            android:background="#ffffff"
             android:contentDescription="@string/enter_your_password"
 
             android:padding="36dp"

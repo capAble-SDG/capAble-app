@@ -33,4 +33,5 @@
     <string name="cancel">Cancel</string>
     <string name="recommended_jobs">Recommended Jobs</string>
     <string name="your_job_searches">Your Job Searches</string>
+    <string name="sign_up_prompt">Don\'t have an account? Sign Up!</string>
 </resources>

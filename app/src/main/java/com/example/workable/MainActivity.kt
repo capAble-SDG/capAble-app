@@ -17,9 +17,11 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -27,7 +29,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -38,6 +39,8 @@ class MainActivity : ComponentActivity() {
         private const val TAG = "ProfileActivity"
     }
 
+    private lateinit var loadingContainer: LinearLayout
+
     private val db = Firebase.firestore
     private var topCompanies = mutableListOf<Company>()
 
@@ -46,6 +49,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         val searchView: SearchView = findViewById(R.id.searchView)
 
@@ -56,7 +60,6 @@ class MainActivity : ComponentActivity() {
         }
 
         intent.getStringExtra("searchQuery")?.let { searchQuery ->
-            val searchView: SearchView = findViewById(R.id.searchView)
             searchView.setQuery(searchQuery, true) // true to submit the query
         }
 
@@ -76,6 +79,7 @@ class MainActivity : ComponentActivity() {
                 .load(company.logo)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .preload()
+
         }
 
         val recommendedJobsContainer: LinearLayout = findViewById(R.id.recommendedJobsContainer)
@@ -87,6 +91,8 @@ class MainActivity : ComponentActivity() {
             recommendedJobsContainer.addView(jobView)
         }
 
+
+        loadingContainer = findViewById(R.id.loadingContainer)
 
         if (DataCache.topCompanies.isNotEmpty()) {
             updateTopCompaniesUI(DataCache.topCompanies)
@@ -103,7 +109,7 @@ class MainActivity : ComponentActivity() {
                     // saves the search query
                     val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
                     val searches = getSearchQueries(sharedPref) + it
-                    val limitedSearches = searches.takeLast(2) // Keep only the last two searches
+                    val limitedSearches = searches.takeLast(2) // keep only the last two searches
                     with(sharedPref.edit()) {
                         putString("searchQueries", Gson().toJson(limitedSearches))
                         apply()
@@ -149,11 +155,14 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun fetchOpportunities() {
+        showLoading(true)
+
         db.collection("opportunities")
             .get()
             .addOnSuccessListener { documents ->
                 DataCache.topCompanies.clear()
                 DataCache.recommendedJobs.clear()
+
 
                 for (document in documents) {
                     val companyName = document.getString("Company") ?: "Unknown"
@@ -190,7 +199,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                GlobalScope.launch(Dispatchers.IO) {
+                lifecycleScope.launch(Dispatchers.IO) {
                     val recommendedJobs = DataCache.recommendedJobs
                     val topCompanies = DataCache.topCompanies
 
@@ -198,13 +207,21 @@ class MainActivity : ComponentActivity() {
                         updateRecommendedJobsUI(recommendedJobs)
                         updateTopCompaniesUI(topCompanies)
                     }
+                    showLoading(false)
+
                 }
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents: ", exception)
+                showLoading(false)
+
             }
     }
 
+
+    private fun showLoading(isLoading: Boolean) {
+        loadingContainer.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
     private fun updateTopCompaniesUI(companies: List<Company>) {
         val companiesWithLogos = companies.filter { !it.logo.isNullOrEmpty() }
         val sortedCompaniesWithLogos = companiesWithLogos.sortedBy { it.name }

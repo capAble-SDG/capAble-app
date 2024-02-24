@@ -38,7 +38,7 @@ class SignUpActivity: AppCompatActivity() {
 
         val backButton: ImageButton = findViewById(R.id.back)
         backButton.setOnClickListener {
-            startActivity(Intent(this, SplashActivity::class.java))
+            finish()
         }
 
         val fullNameEditText: EditText = findViewById(R.id.fullName)
@@ -82,13 +82,7 @@ class SignUpActivity: AppCompatActivity() {
                 confirmPasswordEditText.requestFocus()
                 return@setOnClickListener
             }
-
-            createUser(fullName, email, password)
-            val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
-            with (sharedPref.edit()) {
-                putBoolean("isLoggedIn", true)
-                apply()
-            }
+            saveUserLoginStatus(true, fullName)
             startActivity(Intent(this, MainActivity::class.java))
         }
 
@@ -110,7 +104,7 @@ class SignUpActivity: AppCompatActivity() {
 
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
-                ds.isUnderlineText = true //to make the login underlined
+                ds.isUnderlineText = true
                 ds.color = Color.BLACK
             }
         }
@@ -141,7 +135,7 @@ class SignUpActivity: AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)!!
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
-                Toast.makeText(this, "Google Sign-In failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                showErrorToast("Google sign in failed: $e")
             }
         }
     }
@@ -156,16 +150,12 @@ class SignUpActivity: AppCompatActivity() {
                 val name = firebaseUser?.displayName ?: ""
                 val email = firebaseUser?.email ?: ""
 
-                val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
-                with (sharedPref.edit()) {
-                    putString("fullName", name)
-                    apply()
-                }
+                saveUserLoginStatus(true, name)
 
                 // check if user already exists
                 checkUserInFirestore(name, email)
             } else {
-                Toast.makeText(this, "Authentication Failed.", Toast.LENGTH_SHORT).show()
+                showErrorToast("Google sign in failed: ${task.exception}")
             }
         }
     }
@@ -177,17 +167,14 @@ class SignUpActivity: AppCompatActivity() {
                     // since user doesn't exist, create new
                     addUserToFirestore(fullName, email)
                 } else {
-                    val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
-                    with (sharedPref.edit()) {
-                        putBoolean("isLoggedIn", true)
-                        apply()
-                    }
+
+                    saveUserLoginStatus(true, fullName)
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Error checking user: $e", Toast.LENGTH_SHORT).show()
+                showErrorToast("Error checking user in Firestore: $e")
             }
     }
 
@@ -195,41 +182,28 @@ class SignUpActivity: AppCompatActivity() {
         val user = hashMapOf("fullName" to fullName, "email" to email)
         db.collection("users").add(user)
             .addOnSuccessListener {
-                val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
-                with (sharedPref.edit()) {
-                    putBoolean("isLoggedIn", true)
-                    apply()
-                }
+                saveUserLoginStatus(true, fullName)
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Error adding user to Firestore: $e", Toast.LENGTH_SHORT).show()
+                showErrorToast("Error adding user to Firestore: $e")
             }
     }
 
-
-    private fun createUser(fullName: String, email: String, password: String) {
-        val user = hashMapOf(
-            "fullName" to fullName,
-            "email" to email,
-            "password" to password
-        )
-
-        db.collection("users")
-            .add(user)
-            .addOnSuccessListener { documentReference ->
-                println("User added with ID: ${documentReference.id}")
-                val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
-                with (sharedPref.edit()) {
-                    putString("fullName", fullName)
-                    apply()
-                }
-            }
-            .addOnFailureListener { e ->
-                println("Error adding user $e")
-            }
+    private fun saveUserLoginStatus(isLoggedIn: Boolean, fullName: String? = null) {
+        val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putBoolean("isLoggedIn", isLoggedIn)
+            fullName?.let { putString("fullName", it) }
+            apply()
+        }
     }
+
+    private fun showErrorToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
 
     companion object {
         private const val RC_SIGN_IN = 9001
