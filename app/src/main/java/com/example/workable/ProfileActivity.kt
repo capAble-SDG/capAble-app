@@ -2,6 +2,7 @@ package com.example.workable
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -20,44 +21,48 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.marginLeft
 import com.bumptech.glide.Glide
-import com.example.workable.R
 import com.google.gson.Gson
 
 
 class ProfileActivity : AppCompatActivity() {
 
+    private lateinit var txtJobTitle: TextView
+    private lateinit var txtCompanyName: TextView
+    private lateinit var sharedPref: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        val username: TextView= findViewById(R.id.txtUserName)
-        val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
-        val fullName = sharedPref.getString("fullName", "")
-        username.text = fullName
-        val lastSearchQuery = sharedPref.getString("lastSearchQuery", "")
-        val txtYourJobSearches: TextView = findViewById(R.id.txtYourJobSearches)
-        txtYourJobSearches.text = "Your Job Searches: $lastSearchQuery"
+        sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
 
-        val back: ImageButton = findViewById(R.id.back)
-        back.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+        val username: TextView = findViewById(R.id.txtUserName)
+        txtJobTitle = findViewById(R.id.txtJobTitle)
+        txtCompanyName = findViewById(R.id.txtCompanyName)
+
+        findViewById<ImageButton>(R.id.back).setOnClickListener {
+            finish()
         }
-
-        val home: ImageButton = findViewById(R.id.briefcaseIcon)
-        home.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+        findViewById<ImageButton>(R.id.briefcaseIcon).setOnClickListener {
+            finish()
+//            startActivity(Intent(this, MainActivity::class.java))
         }
-
-        val imgEdit: ImageView = findViewById(R.id.imgEdit)
-        imgEdit.setOnClickListener {
+        findViewById<ImageView>(R.id.imgEdit).setOnClickListener {
             showEditDialog()
         }
+
+        val fullName = sharedPref.getString("fullName", "No Name") // Default value "No Name" for clarity
+        username.text = fullName
+
+        val savedJobTitle = sharedPref.getString("jobTitle", "Job Title") // Default value "Job Title"
+        val savedCompanyName = sharedPref.getString("companyName", "Company Name") // Default value "Company Name"
+        txtJobTitle.text = savedJobTitle
+        txtCompanyName.text = savedCompanyName
+
         inflateJobPositions()
         showLastSearches()
-
     }
+
 
 
     private fun inflateJobPositions() {
@@ -169,25 +174,23 @@ class ProfileActivity : AppCompatActivity() {
         val editJobTitle = dialogView.findViewById<EditText>(R.id.editJobTitle)
         val editCompanyName = dialogView.findViewById<EditText>(R.id.editCompanyName)
 
-        val currentJobTitle = findViewById<TextView>(R.id.txtJobTitle)
-        val currentCompanyName = findViewById<TextView>(R.id.txtCompanyName)
-
-        editJobTitle.setText(currentJobTitle.text)
-        editCompanyName.setText(currentCompanyName.text)
+        editJobTitle.setText(txtJobTitle.text)
+        editCompanyName.setText(txtCompanyName.text)
 
         val dialog = AlertDialog.Builder(this)
             .setTitle(getString(R.string.edit_details))
             .setView(dialogView)
             .setPositiveButton(getString(R.string.save)) { _, _ ->
-                currentJobTitle.text = editJobTitle.text.toString()
-                currentCompanyName.text = editCompanyName.text.toString()
+                val newJobTitle = editJobTitle.text.toString()
+                val newCompanyName = editCompanyName.text.toString()
 
-                val sharedPref = getSharedPreferences("MyApp", Context.MODE_PRIVATE)
                 with(sharedPref.edit()) {
-                    putString("jobTitle", currentJobTitle.text.toString())
-                    putString("companyName", currentCompanyName.text.toString())
+                    putString("jobTitle", newJobTitle)
+                    putString("companyName", newCompanyName)
                     apply()
                 }
+                txtJobTitle.text = newJobTitle
+                txtCompanyName.text = newCompanyName
             }
             .setNegativeButton(getString(R.string.cancel), null)
             .create()

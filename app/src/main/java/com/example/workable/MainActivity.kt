@@ -17,10 +17,11 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -216,6 +217,17 @@ class MainActivity : ComponentActivity() {
                 showLoading(false)
 
             }
+
+        val nestedScrollView: NestedScrollView = findViewById(R.id.scrollableView)
+        val mainLayout: ConstraintLayout = findViewById(R.id.mainLayout)
+
+        nestedScrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
+            if (scrollY > 500) {
+                mainLayout.setBackgroundColor(Color.parseColor("#FFFFFF"))
+            } else {
+                mainLayout.setBackgroundColor(Color.parseColor("#ECEFEF"))
+            }
+        })
     }
 
 

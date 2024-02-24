@@ -45,7 +45,7 @@
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             android:text="@string/full_time"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/jobLocation"
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
         android:text="@string/remote"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
 
 <!--    <TextView-->
